@@ -1,2 +1,2 @@
 # tutorial
-java ,spring,springboot ,springMVC,spring cloud labs
+Java ,Spring,SpringMVC,SpringBoot,Spring Cloud labs
