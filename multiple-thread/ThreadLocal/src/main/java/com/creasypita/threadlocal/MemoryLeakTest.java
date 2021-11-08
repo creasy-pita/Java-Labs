@@ -4,7 +4,7 @@ package com.creasypita.threadlocal;
  * Created by lujq on 11/8/2021.
  */
 public class MemoryLeakTest {
-
+    //    会提示堆内存溢出
     public static void main(String[] args) {
         new Thread(new Runnable() {
             @Override
@@ -17,6 +17,20 @@ public class MemoryLeakTest {
             }
         }).start();
     }
+    // 解决了泄漏
+//    public static void main(String[] args) {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 1000; i++) {
+//                    TestClass t = new TestClass(i);
+//                    t.printId();
+//                    t.threadLocal.remove();
+//                }
+//            }
+//        }).start();
+//    }
+
 
     static class TestClass{
         private int id;
