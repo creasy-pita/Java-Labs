@@ -1,0 +1,39 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "learning.mappers.StudentMapper">
+    <resultMap id = "result" type = "Student">
+        <result property = "id" column = "ID"/>
+        <result property = "name" column = "NAME"/>
+        <result property = "branch" column = "BRANCH"/>
+        <result property = "percentage" column = "PERCENTAGE"/>
+        <result property = "phone" column = "PHONE"/>
+        <result property = "email" column = "EMAIL"/>
+    </resultMap>
+    <insert id="insertStudent" parameterType="Student">
+        INSERT INTO STUDENT (name, branch, percentage, phone, email ) values (#{name}, #{branch}, #{percentage}, #{phone}, #{email});
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            select last_insert_id() as id
+        </selectKey>
+    </insert>
+    <insert id="insertStudents" parameterType="learning.model.Student" >
+        insert into student (name, branch, percentage, phone, email )  select * from (
+          <foreach collection="list1" item="item" separator="union all">
+              select #{item.name,  jdbcType=VARCHAR} name, #{item.branch, jdbcType=VARCHAR} branch, #{item.percentage, jdbcType=INTEGER} percentage, #{item.phone, jdbcType=VARCHAR} phone, #{item.email, jdbcType=VARCHAR} email
+                from dual
+          </foreach>
+        ) as t
+    </insert>
+    <update id="updateStudent" parameterType="Student">
+        UPDATE STUDENT SET name=#{name}, branch=#{branch}, percentage=#{percentage}, phone=#{phone}, email=#{email} where id=#{id};
+    </update>
+    <delete id="deleteStudent" parameterType="int">
+        DELETE FROM STUDENT WHERE id=#{id};
+    </delete>
+    <select id="GetAll"  resultMap="result">
+        SELECT * FROM STUDENT;
+    </select>
+    <select id="getById" parameterType="int" resultMap="result">
+        SELECT * FROM STUDENT WHERE id=#{id};
+    </select>
+
+</mapper>
