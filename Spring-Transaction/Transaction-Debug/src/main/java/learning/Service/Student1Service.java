@@ -1,9 +1,10 @@
 package learning.Service;
 
-import learning.mappers.StudentMapper;
-import learning.model.Student;
+import learning.mappers.Student1Mapper;
+import learning.model.Student1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -12,33 +13,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class Student1Service {
     @Autowired
-    private StudentMapper studentMapper;
+    private Student1Mapper student1Mapper;
 
-    public Student getById(int id){
-        return studentMapper.getById(id);
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequired(Student1 student){
+        student1Mapper.insertStudent(student);
     }
 
-    public void insertStudent(Student student){
-        studentMapper.insertStudent(student);
-    }
-
-    @Transactional
-    public void insertRequired(Student student){
-        studentMapper.insertStudent(student);
-    }
-
-    @Transactional
-    public void insertRequiredException(Student student){
-        studentMapper.insertStudent(student);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequiredException(Student1 student){
+        student1Mapper.insertStudent(student);
         throw new RuntimeException();
     }
 
-    @Transactional
-    public void insertRequiredWithSQLExceptionCatched(Student student){
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequiredWithSQLExceptionCatched(Student1 student){
         try {
-            //手动制作sql异常
+            //手动制造sql异常
             student.setName("55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
-            studentMapper.insertStudent(student);
+            student1Mapper.insertStudent(student);
         }catch (Exception ex){
             System.out.println("Student1Service 发生异常");
         }

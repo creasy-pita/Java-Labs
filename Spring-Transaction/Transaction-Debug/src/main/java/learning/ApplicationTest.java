@@ -1,8 +1,6 @@
 package learning;
 
 import learning.Service.CommonService;
-import learning.Service.Student1Service;
-import learning.model.Student;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -14,17 +12,6 @@ public class ApplicationTest {
         demo();
 
     }
-
-//    public static void demo(){
-//        ApplicationContext context = new ClassPathXmlApplicationContext("springConfig.xml");
-//        Student1Service student1Service = context.getBean(Student1Service.class);
-//
-//        Student student = student1Service.getById(1);
-//        student.setPhone(22);
-//        student.setEmail("ccc");
-//        student1Service.insertRequiredException(student);
-//        System.out.println("update complete");
-//    }
 
     // 场景
     public static void demo(){

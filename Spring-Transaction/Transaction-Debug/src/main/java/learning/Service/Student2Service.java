@@ -1,9 +1,10 @@
 package learning.Service;
 
-import learning.mappers.StudentMapper;
-import learning.model.Student;
+import learning.mappers.Student2Mapper;
+import learning.model.Student2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -13,30 +14,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class Student2Service {
 
     @Autowired
-    private StudentMapper studentMapper;
+    private Student2Mapper student2Mapper;
 
-    public Student getById(int id){
-        return studentMapper.getById(id);
-    }
-    @Transactional
-    public void insertRequired(Student student){
-        studentMapper.insertStudent(student);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequired(Student2 student){
+        student2Mapper.insertStudent(student);
     }
 
-    @Transactional
-    public void insertRequiredException(Student student){
-        studentMapper.insertStudent(student);
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequiredException(Student2 student){
+        student2Mapper.insertStudent(student);
         throw new RuntimeException();
     }
 
-    @Transactional
-    public void insertRequiredWithInnerSQLExceptionCatched(Student student){
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertRequiredWithInnerSQLExceptionCatched(Student2 student){
         try {
-            //手动制作sql异常
+            //手动制造sql异常
             student.setName("55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555");
-            studentMapper.insertStudent(student);
+            student2Mapper.insertStudent(student);
         }catch (Exception ex){
-            System.out.println("Student1Service 发生异常");
+            System.out.println("Student2Service 发生异常");
         }
     }
 }

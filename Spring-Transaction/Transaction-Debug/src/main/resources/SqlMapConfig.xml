@@ -7,7 +7,8 @@
         <setting name="logImpl" value="LOG4J"/>
     </settings>
     <typeAliases>
-        <typeAlias alias = "Student" type = "learning.model.Student"/>
+        <typeAlias alias = "Student1" type = "learning.model.Student1"/>
+        <typeAlias alias = "Student2" type = "learning.model.Student2"/>
     </typeAliases>
 
     <environments default = "development">
@@ -23,6 +24,7 @@
     </environments>
 
     <mappers>
-        <mapper resource = "mybatis/mybatisStudent.xml"/>
+        <mapper resource = "mybatis/mybatisStudent1.xml"/>
+        <mapper resource = "mybatis/mybatisStudent2.xml"/>
     </mappers>
 </configuration>

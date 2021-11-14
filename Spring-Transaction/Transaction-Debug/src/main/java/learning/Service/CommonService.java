@@ -1,8 +1,10 @@
 package learning.Service;
 
-import learning.model.Student;
+import learning.model.Student1;
+import learning.model.Student2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -18,9 +20,9 @@ public class CommonService {
     private Student2Service service2;
 
     public void notransaction_exception_required_required(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
 
         service1.insertRequired(student1);
@@ -29,20 +31,20 @@ public class CommonService {
     }
 
     public void notransaction_required_required_exception(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
 
         service1.insertRequired(student1);
         service2.insertRequiredException(student2);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void transaction_exception_required_required(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
 
         service1.insertRequired(student1);
@@ -50,22 +52,22 @@ public class CommonService {
         throw new RuntimeException();
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void transaction_required_required_exception(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
 
         service1.insertRequired(student1);
         service2.insertRequiredException(student2);
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void transaction_required_required_exception_try(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
         service1.insertRequired(student1);
         try {
@@ -75,11 +77,11 @@ public class CommonService {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void transaction_required_required_InnerSQLExceptionCatched(){
-        Student student1 = new Student();
+        Student1 student1 = new Student1();
         student1.setName("a");
-        Student student2 = new Student();
+        Student2 student2 = new Student2();
         student2.setName("b");
 
         service1.insertRequired(student1);
