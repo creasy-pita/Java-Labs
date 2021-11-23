@@ -1,5 +1,7 @@
 package com.creasypita.StringLab;
 
+import sun.rmi.runtime.Log;
+
 /**
  * Created by lujq on 11/16/2021.
  */
@@ -27,5 +29,6 @@ public class StringPoolTest {
         //intern在newString 中使用，会使得str5指向string pool
 
         System.out.println(str1 == str5);//true
+
     }
 }

@@ -13,6 +13,8 @@
         <module>Spring-Transaction</module>
         <module>Spring-Transaction</module>
         <module>StringLab</module>
+        <module>Serialization</module>
+        <module>SpringBoot-RestTemplate</module>
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>
