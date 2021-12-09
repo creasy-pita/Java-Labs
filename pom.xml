@@ -15,6 +15,7 @@
         <module>StringLab</module>
         <module>Serialization</module>
         <module>SpringBoot-RestTemplate</module>
+        <module>JprofileTestPgGetInt</module>
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>
