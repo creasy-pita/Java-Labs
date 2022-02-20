@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Java-Labs.iml" filepath="$PROJECT_DIR$/Java-Labs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JprofileTestPgGetInt/JprofileTestPgGetInt.iml" filepath="$PROJECT_DIR$/JprofileTestPgGetInt/JprofileTestPgGetInt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Serialization/Serialization.iml" filepath="$PROJECT_DIR$/Serialization/Serialization.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring-Transaction/Spring-Transaction.iml" filepath="$PROJECT_DIR$/Spring-Transaction/Spring-Transaction.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SpringBoot-RestTemplate/SpringBoot-RestTemplate.iml" filepath="$PROJECT_DIR$/SpringBoot-RestTemplate/SpringBoot-RestTemplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/StringLab/StringLab.iml" filepath="$PROJECT_DIR$/StringLab/StringLab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Spring-Transaction/Transaction-Debug/Transaction-Debug.iml" filepath="$PROJECT_DIR$/Spring-Transaction/Transaction-Debug/Transaction-Debug.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multiple-thread/multiple-thread.iml" filepath="$PROJECT_DIR$/multiple-thread/multiple-thread.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multiple-thread/ThreadLocal/threadlocal.iml" filepath="$PROJECT_DIR$/multiple-thread/ThreadLocal/threadlocal.iml" />
+    </modules>
+  </component>
+</project>

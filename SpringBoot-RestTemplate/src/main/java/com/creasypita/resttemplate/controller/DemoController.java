@@ -3,6 +3,7 @@ package com.creasypita.resttemplate.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
@@ -19,7 +20,7 @@ public class DemoController {
     @Autowired
     RestTemplate restTemplate;
 
-    @RequestMapping(value = "/template/homeData")
+    @RequestMapping(value = "/template/homeData",method = {RequestMethod.GET,RequestMethod.DELETE})
     public String getHomeData() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

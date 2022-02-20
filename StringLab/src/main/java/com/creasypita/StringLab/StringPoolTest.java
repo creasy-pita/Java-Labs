@@ -2,12 +2,21 @@ package com.creasypita.StringLab;
 
 import sun.rmi.runtime.Log;
 
+import javax.sound.midi.Soundbank;
+
 /**
  * Created by lujq on 11/16/2021.
  */
 public class StringPoolTest {
 
     public static void main(String[] args) {
+new Traveller();
+    }
+
+    static void pong(){
+        System.out.println("pong");
+    }
+    public static void aa(){
         String str1 = "abc";
         String str2 = "abc";
         String str3 = new String("abc");
