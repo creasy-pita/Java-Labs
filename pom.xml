@@ -16,6 +16,8 @@
         <module>Serialization</module>
         <module>SpringBoot-RestTemplate</module>
         <module>JprofileTestPgGetInt</module>
+        <module>java-core</module>
+        <module>Abstract</module>
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>
