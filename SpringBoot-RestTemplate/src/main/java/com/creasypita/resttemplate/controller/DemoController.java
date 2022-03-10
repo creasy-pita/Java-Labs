@@ -27,6 +27,8 @@ public class DemoController {
 
         return restTemplate.exchange("http://192.168.9.83:19010/rulesengine/home/homeData?xmxxBsm=81", HttpMethod.GET, entity, String.class).getBody();
     }
+
+    //[异常断点]todo 用于测试异常断点，请勿修改balala
     @RequestMapping(value = "/template/a")
     public String restTemplateWithHttpStatusCodeException(){
         HttpHeaders headers = new HttpHeaders();
@@ -34,17 +36,21 @@ public class DemoController {
         HttpEntity <String> entity = new HttpEntity<String>(headers);
 
         ResponseEntity<String> responseEntity = null;
-        try {
+//[异常断点]注释try catch，在增加异常断点，类型为 HttpServerErrorException，就可以进行调试
+//[异常断点]注释try catch，在增加异常断点，类型为 Exception，就可以进行调试并查看到过程中的所有断点
+//        如果suspend 选中all,就可以查看阻塞并定位到所有线程抛出的Exception
+//        如果suspend 选中thread,就可以查看阻塞并定位到当前线程抛出的Exception
+//        try {
             responseEntity = restTemplate.exchange("http://192.168.100.66:10000/template/b", HttpMethod.GET, entity, String.class);
-        } catch (HttpServerErrorException | HttpClientErrorException e) {
-            System.out.println("跑错了");
-            System.out.println( e.getStatusCode());
-            String.valueOf(e.getResponseBodyAsByteArray());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println("跑错了");
-            e.printStackTrace();
-        }
+//        } catch (HttpServerErrorException | HttpClientErrorException e) {
+//            System.out.println("跑错了");
+//            System.out.println( e.getStatusCode());
+//            String.valueOf(e.getResponseBodyAsByteArray());
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            System.out.println("跑错了");
+//            e.printStackTrace();
+//        }
 
         return  responseEntity.getBody();
     }

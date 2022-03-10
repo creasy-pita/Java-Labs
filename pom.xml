@@ -18,6 +18,7 @@
         <module>JprofileTestPgGetInt</module>
         <module>java-core</module>
         <module>Abstract</module>
+        <module>jvmTest</module>
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>

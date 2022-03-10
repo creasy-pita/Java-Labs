@@ -1,11 +1,16 @@
 package com.creasypita.threadlocal;
 
+import com.github.pagehelper.PageHelper;
+
 /**
  * Created by lujq on 11/8/2021.
  */
 public class MemoryLeakTest {
     //    会提示堆内存溢出
     public static void main(String[] args) {
+
+        PageHelper
+
         new Thread(new Runnable() {
             @Override
             public void run() {
