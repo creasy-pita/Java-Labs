@@ -19,6 +19,7 @@
         <module>java-core</module>
         <module>Abstract</module>
         <module>jvmTest</module>
+        <module>jdbc</module>
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>
