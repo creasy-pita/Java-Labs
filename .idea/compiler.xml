@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Spring-DataSource" />
+        <module name="Serialization" />
+        <module name="JvmTestPgGetInt" />
+        <module name="Transaction-Deubg" />
+        <module name="SpringBoot-RestTemplate" />
+        <module name="StringLab" />
+        <module name="ClassLoader" />
+        <module name="Transaction-Debug" />
+        <module name="jdbc" />
+        <module name="jvmTest" />
+        <module name="threadlocal" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel target="8">
+      <module name="Abstract" target="8" />
+      <module name="ClassLoader" target="8" />
+      <module name="dynamic-datasource-JPA" target="1.5" />
+      <module name="java-core" target="8" />
+      <module name="Java-Labs" target="8" />
+      <module name="jdbc" target="8" />
+      <module name="jvmTest" target="8" />
+      <module name="JvmTestPgGetInt" target="8" />
+      <module name="multiple-thread" target="8" />
+      <module name="Serialization" target="8" />
+      <module name="Spring-DataSource" target="1.5" />
+      <module name="Spring-Transaction" target="8" />
+      <module name="Spring-Transcation" target="8" />
+      <module name="SpringBoot-RestTemplate" target="8" />
+      <module name="StringLab" target="8" />
+      <module name="threadlocal" target="8" />
+      <module name="Transaction-Debug" target="8" />
+      <module name="Transaction-Deubg" target="8" />
+      <module name="Transcation-Debug" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SpringBoot-RestTemplate" options="-parameters" />
+    </option>
+  </component>
+</project>

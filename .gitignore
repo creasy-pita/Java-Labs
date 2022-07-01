@@ -2,7 +2,6 @@
 *.class
 
 # IDEA #
-.idea/
 *.iml
 *.iws
 
