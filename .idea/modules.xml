@@ -3,19 +3,18 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/java-core/ClassLoader/ClassLoader.iml" filepath="$PROJECT_DIR$/java-core/ClassLoader/ClassLoader.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/Java-Labs.iml" filepath="$PROJECT_DIR$/.idea/Java-Labs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/JprofileTestPgGetInt/JvmTestPgGetInt.iml" filepath="$PROJECT_DIR$/JprofileTestPgGetInt/JvmTestPgGetInt.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Java-Labs.iml" filepath="$PROJECT_DIR$/Java-Labs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JprofileTestPgGetInt/JprofileTestPgGetInt.iml" filepath="$PROJECT_DIR$/JprofileTestPgGetInt/JprofileTestPgGetInt.iml" />
       <module fileurl="file://$PROJECT_DIR$/Serialization/Serialization.iml" filepath="$PROJECT_DIR$/Serialization/Serialization.iml" />
       <module fileurl="file://$PROJECT_DIR$/Spring-Transaction/Spring-Transaction.iml" filepath="$PROJECT_DIR$/Spring-Transaction/Spring-Transaction.iml" />
       <module fileurl="file://$PROJECT_DIR$/SpringBoot-RestTemplate/SpringBoot-RestTemplate.iml" filepath="$PROJECT_DIR$/SpringBoot-RestTemplate/SpringBoot-RestTemplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/StringLab/StringLab.iml" filepath="$PROJECT_DIR$/StringLab/StringLab.iml" />
       <module fileurl="file://$PROJECT_DIR$/Spring-Transaction/Transaction-Debug/Transaction-Debug.iml" filepath="$PROJECT_DIR$/Spring-Transaction/Transaction-Debug/Transaction-Debug.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Spring-Transaction/Transaction-Deubg/Transaction-Deubg.iml" filepath="$PROJECT_DIR$/Spring-Transaction/Transaction-Deubg/Transaction-Deubg.iml" />
       <module fileurl="file://$PROJECT_DIR$/java-core/java-core.iml" filepath="$PROJECT_DIR$/java-core/java-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc/jdbc.iml" filepath="$PROJECT_DIR$/jdbc/jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/jvmTest/jvmTest.iml" filepath="$PROJECT_DIR$/jvmTest/jvmTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/multiple-thread/multiple-thread.iml" filepath="$PROJECT_DIR$/multiple-thread/multiple-thread.iml" />
-      <module fileurl="file://$PROJECT_DIR$/multiple-thread/threadlocal/threadlocal.iml" filepath="$PROJECT_DIR$/multiple-thread/threadlocal/threadlocal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/multiple-thread/ThreadLocal/threadlocal.iml" filepath="$PROJECT_DIR$/multiple-thread/ThreadLocal/threadlocal.iml" />
     </modules>
   </component>
 </project>
