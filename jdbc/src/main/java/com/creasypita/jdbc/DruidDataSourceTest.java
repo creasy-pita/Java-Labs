@@ -1,27 +1,52 @@
 package com.creasypita.jdbc;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.postgresql.ds.PGPoolingDataSource;
 
-import javax.sql.DataSource;
-import java.io.FileInputStream;
-import java.sql.*;
-import java.util.Properties;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Created by lujq on 6/30/2022.
  */
-public class SimpleDataSource {
+public class DruidDataSourceTest {
 
     static final String DB_URL = "jdbc:postgresql://192.168.100.66:5432/zwzt?currentSchema=apolloconfigdbold&characterEncoding=utf8&useSSL=true&allowMultiQueries=true";
     static final String USER = "postgres";
     static final String PASS = "postgres";
     static final String QUERY = "SELECT * FROM app";
+    static final DruidDataSource ds = new DruidDataSource() ;
 
-    public static void main(String[] args) {
-        BasicDataSource ds = getDataSource();
+static {
+    ds.setUrl(DB_URL);
+    ds.setUsername(USER);
+    ds.setPassword(PASS);
+
+    ds.setMinIdle(10);
+    ds.setInitialSize(10);
+    ds.setMaxActive(20);
+//        ds.setMaxIdle(10);
+    ds.setMaxOpenPreparedStatements(100);
+}
+
+
+    public static void main(String[] args) throws InterruptedException {
+        for (int i = 0; i < 1; i++) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    query();
+                }
+            }).start();
+        }
+        Thread.sleep(20000);
+    }
+
+    public static void query(){
         try(Connection conn = ds.getConnection()) {
+            Thread.sleep(5000);
             try(Statement stmt = conn.createStatement()) {
                 try(ResultSet rs = stmt.executeQuery(QUERY)) {
 
@@ -34,23 +59,10 @@ public class SimpleDataSource {
                     }
                 }
             }
-        } catch (SQLException e) {
+
+        } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
         }
-
-    }
-
-    private static BasicDataSource getDataSource()
-    {
-        BasicDataSource ds = new BasicDataSource();
-        ds.setUrl(DB_URL);
-        ds.setUsername(USER);
-        ds.setPassword(PASS);
-
-        ds.setMinIdle(5);
-        ds.setMaxIdle(10);
-        ds.setMaxOpenPreparedStatements(100);
-        return ds;
     }
 
 }

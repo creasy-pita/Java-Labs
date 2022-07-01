@@ -8,9 +8,6 @@ import com.github.pagehelper.PageHelper;
 public class MemoryLeakTest {
     //    会提示堆内存溢出
     public static void main(String[] args) {
-
-        PageHelper
-
         new Thread(new Runnable() {
             @Override
             public void run() {
