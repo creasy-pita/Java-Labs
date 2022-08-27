@@ -9,17 +9,18 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>multiple-thread</module>
-        <module>Spring-Transaction</module>
-        <module>Spring-Transaction</module>
-        <module>StringLab</module>
-        <module>Serialization</module>
-        <module>SpringBoot-RestTemplate</module>
-        <module>JprofileTestPgGetInt</module>
-        <module>java-core</module>
-        <module>Abstract</module>
-        <module>jvmTest</module>
-        <module>jdbc</module>
+<!--        <module>multiple-thread</module>-->
+<!--        <module>Spring-Transaction</module>-->
+<!--        <module>Spring-Transaction</module>-->
+<!--        <module>StringLab</module>-->
+<!--        <module>Serialization</module>-->
+<!--        <module>SpringBoot-RestTemplate</module>-->
+<!--        <module>JprofileTestPgGetInt</module>-->
+<!--        <module>java-core</module>-->
+<!--        <module>Abstract</module>-->
+        <module>logger</module>
+<!--        <module>jvmTest</module>-->
+<!--        <module>jdbc</module>-->
         <!--        <module>Spring-DataSource</module>-->
     </modules>
     <properties>
