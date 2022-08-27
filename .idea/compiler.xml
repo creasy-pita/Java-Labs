@@ -6,15 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Serialization" />
         <module name="JprofileTestPgGetInt" />
-        <module name="SpringBoot-RestTemplate" />
-        <module name="StringLab" />
-        <module name="ClassLoader" />
-        <module name="Transaction-Debug" />
-        <module name="jdbc" />
-        <module name="jvmTest" />
-        <module name="threadlocal" />
+        <module name="logger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -24,6 +17,7 @@
       <module name="jdbc" target="8" />
       <module name="JprofileTestPgGetInt" target="8" />
       <module name="jvmTest" target="8" />
+      <module name="logger" target="8" />
       <module name="multiple-thread" target="8" />
       <module name="Serialization" target="8" />
       <module name="Spring-Transaction" target="8" />
