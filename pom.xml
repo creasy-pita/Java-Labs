@@ -12,7 +12,7 @@
 <!--        <module>multiple-thread</module>-->
 <!--        <module>Spring-Transaction</module>-->
 <!--        <module>Spring-Transaction</module>-->
-<!--        <module>StringLab</module>-->
+        <module>StringLab</module>
 <!--        <module>Serialization</module>-->
 <!--        <module>SpringBoot-RestTemplate</module>-->
 <!--        <module>JprofileTestPgGetInt</module>-->
@@ -27,5 +27,14 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>compile</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
