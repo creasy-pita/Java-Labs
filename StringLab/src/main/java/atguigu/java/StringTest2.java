@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *  -XX:StringTableSize=1009
+ *  -XX:StringTableSize=1009 代码hashtable的数组容量大小
  * @author shkstart  shkstart@126.com
  * @create 2020  23:53
  */
@@ -29,7 +29,7 @@ public class StringTest2 {
             }
 
             long end = System.currentTimeMillis();
-
+            //数组容量大，链表短，插入和查询效率更改高
             System.out.println("花费的时间为：" + (end - start));//1009:143ms  100009:47ms
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,15 +6,11 @@
         <artifactId>Java-Labs</artifactId>
         <groupId>com.creasypita</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>Spring-Transaction</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>Transaction-Debug</module>
-        <module>Annonta-Config-Tran</module>
-    </modules>
+    <artifactId>generic</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
