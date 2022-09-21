@@ -1,13 +1,7 @@
 package com.creasypita.transaction;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -23,7 +17,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class AppConfig {
 
-    @Bean(name = "dataSource")
+    @Bean
     public DataSource dataSource() {
         // configure and return the necessary JDBC DataSource
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
