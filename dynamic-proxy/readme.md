@@ -18,6 +18,29 @@ public class HelloWorld implements Hello {
 }
 ```
 
+**定义用于封装代理逻辑的类，需要实现InvocationHandler接口**
+
+```java
+public class HelloInvocationHandler implements  InvocationHandler {
+
+    private Object target;
+
+    public HelloInvocationHandler(Object target){
+        this.target = target;
+    }
+    
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+        System.out.println(System.currentTimeMillis() + " - " + method.getName() + " method start");
+        // 调用目标方法
+        Object retVal = method.invoke(target, args);
+        System.out.println(System.currentTimeMillis() + " - " + method.getName() + " method over");
+
+        return retVal;
+    }
+}
+```
+
 **代理创建类**
 
 JDK 的动态代理主要是通过 JDK 提供的代理创建类 Proxy 为目标对象创建代理，Proxy 中创建代理的方法声明。如下
@@ -42,16 +65,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 public class Main {
     public static void main(String[] args) {
-        InvocationHandler handler = new InvocationHandler() {
-            @Override
-            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-                System.out.println(method);
-                if (method.getName().equals("morning")) {
-                    System.out.println("Good morning, " + args[0]);
-                }
-                return null;
-            }
-        };
+        InvocationHandler handler = new HelloInvocationHandler(new HelloWorld()) ;
         Hello hello = (Hello) Proxy.newProxyInstance(
             Hello.class.getClassLoader(), // 传入ClassLoader
             new Class[] { Hello.class }, // 传入要实现的接口

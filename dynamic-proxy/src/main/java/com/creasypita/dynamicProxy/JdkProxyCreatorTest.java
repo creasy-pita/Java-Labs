@@ -3,6 +3,9 @@ package com.creasypita.dynamicProxy;
 import com.creasypita.dynamicProxy.service.UserService;
 import com.creasypita.dynamicProxy.service.UserServiceImpl;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+
 /**
  * Created by lujq on 9/22/2022.
  */
@@ -26,4 +29,5 @@ public class JdkProxyCreatorTest {
         System.out.println();
         userService.update(null);
     }
+
 }
