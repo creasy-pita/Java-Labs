@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 <modules>
     <module>threadlocal</module>
+    <module>thread-lock</module>
 </modules>
 
     <properties>
