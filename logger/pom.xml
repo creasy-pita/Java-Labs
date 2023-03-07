@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>slf4jToLog4j</module>
+        <module>log4jDemo</module>
     </modules>
 
 
