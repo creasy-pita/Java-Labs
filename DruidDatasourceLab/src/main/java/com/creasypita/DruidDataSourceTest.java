@@ -11,10 +11,15 @@ import java.sql.SQLException;
 public class DruidDataSourceTest {
 
     public static void main(String[] args) throws SQLException {
-        Connection connection = DruidUtil.getConnection();
-        PreparedStatement ps = connection.prepareStatement("select * from bt_user limit 2");
-        ResultSet resultSet = ps.executeQuery();
-        System.out.println(resultSet.toString());
-        DruidUtil.close(connection,ps,resultSet);
+//        Connection connection = DruidUtil.getConnection();
+//        PreparedStatement ps = connection.prepareStatement("select * from bt_user limit 2");
+//        ResultSet resultSet = ps.executeQuery();
+//        System.out.println(resultSet.toString());
+//        DruidUtil.close(connection,ps,resultSet);
+
+        new MyThread().start();
+        new MyThread().start();
+        new MyThread().start();
+//        new MyThread().start();
     }
 }
