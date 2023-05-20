@@ -21,6 +21,7 @@
         <module>logger</module>
         <module>java-core/generic</module>
         <module>dynamic-proxy</module>
+        <module>DruidDatasourceLab</module>
         <!--        <module>jvmTest</module>-->
 <!--        <module>jdbc</module>-->
         <!--        <module>Spring-DataSource</module>-->
