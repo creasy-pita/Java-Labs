@@ -49,6 +49,22 @@ private static final Logger logger = Logger.getLogger(LogTest.class);
 }
 ```
 
+### additivity
+
+用于控制树形logger中子类logger是否继承父类的appender， 默认是true;
+比如
+
+```properties{.line-numbers}
+log4j.rootLogger=WARN, Console, RollingFile
+log4j.additivity.com.creasypita.logger.A=false
+log4j.logger.com.creasypita.logger.A=DEBUG, RollingFile
+log4j.logger.com.creasypita.logger.B=INFO, RollingFile
+```
+
+- 第一行表示rootlogger输出到Console, RollingFile
+- 这里A不会继承root,只会输出到自己定义的RollingFile
+- 这里B就默认继承root,输出到Console, RollingFile
+
 ### 其他
 
 在上面的示例中，我们创建了一个 logger 实例，通过调用 logger 的 debug、info、warn、error 和 fatal 等方法，记录不同级别的日志。日志将根据配置文件中的设置输出到控制台或其他地方。
@@ -84,3 +100,18 @@ log4j.appender.RollingFile.Threshold=DEBUG
 上面的配置中，log4j.rootLogger 设置了 DEBUG 级别，同时配置了 Console 和 RollingFile 两个 Appender 的输出。Console 的输出级别设置为 INFO，RollingFile 的输出级别设置为 DEBUG。
 
 在配置中，可以根据实际需求修改 Console 和 RollingFile 的输出格式、路径、文件大小等参数。需要注意的是，在同时输出到 Console 和 RollingFile 时，由于 Console 会将日志实时输出到控制台，因此建议将 Console 输出级别设置为较高的级别，例如 INFO 或 WARN，以避免大量无用的 debug 日志输出到控制台上造成干扰。
+
+### 场景 子类的logger输出到不同appender中
+
+
+
+```properties{.line-numbers}
+log4j.rootLogger=WARN, Console, RollingFile
+log4j.additivity.com.creasypita.logger.A=false
+log4j.logger.com.creasypita.logger.A=DEBUG, ARollingFile
+log4j.additivity.com.creasypita.logger.A=false
+log4j.logger.com.creasypita.logger.B=INFO, BRollingFile
+```
+
+- 这里A只会输出的`ARollingFile`
+- 这里B就默认继承root,输出到`BRollingFile`
