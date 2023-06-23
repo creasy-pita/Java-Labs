@@ -33,7 +33,10 @@ public class DruidUtil {
     }
     //获取连接
     public static Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        Connection connection = dataSource.getConnection();
+//        System.out.println("当前连接池活跃连接数为" +  ((DruidDataSource) dataSource).getActiveCount());
+//        System.out.println("当前连接池空闲连接数为" +   ((DruidDataSource) dataSource).getPoolingCount());
+        return connection;
     }
     //释放资源
     public static void close(Connection conn, Statement ps, ResultSet rs){
@@ -61,5 +64,8 @@ public class DruidUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("当前连接池活跃连接数为" +  ((DruidDataSource) dataSource).getActiveCount());
+        System.out.println("当前连接池空闲连接数为" +   ((DruidDataSource) dataSource).getPoolingCount());
     }
+
 }

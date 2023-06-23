@@ -8,29 +8,26 @@ import java.sql.SQLException;
 /**
  * Created by lujq on 5/20/2023.
  */
-public class MyThread extends Thread{
+public class MyThread2 extends Thread{
     public void run(){
         Connection connection = null;
         try {
             connection = DruidUtil.getConnection();
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         PreparedStatement ps = null;
         try {
-
-            ps = connection.prepareStatement("select * from bt_user limit 1");
-
+            ps = connection.prepareStatement("select * from bt_user limit 2");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         ResultSet resultSet = null;
         try {
-
             System.out.println(Thread.currentThread().toString() + "开始查询sql...");
             resultSet = ps.executeQuery();
             System.out.println(resultSet);
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
