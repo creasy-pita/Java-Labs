@@ -1,5 +1,8 @@
 package com.creasypita;
 
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggerFactory;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +13,10 @@ import java.sql.SQLException;
  */
 public class DruidDataSourceTest {
 
+    private static final Logger logger = Logger.getLogger(DruidDataSourceTest.class);
+
     public static void main(String[] args) throws SQLException {
+        logger.debug("开始---------------------------------------------------------");
         testDBServeCutTheConnection();
     }
 
@@ -19,26 +25,18 @@ public class DruidDataSourceTest {
      */
     public static void testDBServeCutTheConnection() {
         for (int i = 0; i < 10; i++) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             new MyThread().start();
         }
 
         try {
-            Thread.sleep(20000);
+            Thread.sleep(25000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         System.out.println("---------------------------------------------------------");
-        for (int i = 0; i < 2; i++) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+        for (int i = 0; i < 10; i++) {
             new MyThread().start();
         }
 

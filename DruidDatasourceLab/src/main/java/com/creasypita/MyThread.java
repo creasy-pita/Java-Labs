@@ -36,7 +36,7 @@ public class MyThread extends Thread{
         }
         System.out.println("连接使用5秒");
         try {
-            Thread.sleep(5000);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

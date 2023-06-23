@@ -356,18 +356,16 @@ url = jdbc:mysql://192.168.100.66:3306/platform?useUnicode=true&characterEncodin
 username = root
 password = 123456
 
-initialSize=2
+initialSize=1
 maxActive = 20
-minActive = 2
+minActive = 1
 minIdle = 5
 maxWait = 30000
 
 removeAbandoned = false
 removeAbandonedTimeout = 6
 validationQuery=select 1
-# 2秒钟就去保活检查
 keepAlive = true
-keepAliveBetweenTimeMillis = 2000
 logAbandoned = true
 
 timeBetweenEvictionRunsMillis = 1000
@@ -385,4 +383,75 @@ my.ini
 # 最大空闲超时时间
 wait_timeout=20
 interactive_timeout = 20
+```
+
+### 测试代码
+
+```java
+    /**
+     * 测试数据库服务端主动掐掉连接，客户端这些连接与服务端通信发数据时报错的场景
+     */
+    public static void testDBServeCutTheConnection() {
+        for (int i = 0; i < 10; i++) {
+            new MyThread().start();
+        }
+
+        try {
+            Thread.sleep(35000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("---------------------------------------------------------");
+//过35秒后，mysql设置了20秒空闲超时，所以mysql服务端已经掐掉了连接，以下再去使用连接时会报错
+        for (int i = 0; i < 10; i++) {
+            new MyThread().start();
+        }
+
+    }
+```
+
+### 测试结果
+
+testOnBorrow=true
+testOnIdle=true时会有如下报错，因为在getconnection时会取检查连接
+
+```log
+21:14:56 DEBUG [Thread-12] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-11] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-16] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-20] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-18] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-19] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-14] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-13] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-15] pool.DruidDataSource - skip not validate connection.
+21:14:56 DEBUG [Thread-17] pool.DruidDataSource - skip not validate connection.
+```
+
+testOnBorrow=false
+testOnIdle=false 时会有如下报错，因为在getconnection时不会取检查连接
+
+```java
+The last packet successfully received from the server was 34,748 milliseconds ago.  The last packet sent successfully to the server was 0 milliseconds ago.
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1117)
+	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3567)
+	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3456)
+	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3997)
+	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2468)
+	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2629)
+	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2719)
+	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2318)
+	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227)
+	at com.creasypita.MyThread.run(MyThread.java:32)
+Caused by: java.io.EOFException: Can not read response from server. Expected to read 4 bytes, read 0 bytes before connection was unexpectedly lost.
+	at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:3017)
+	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3467)
+	... 9 more
 ```
