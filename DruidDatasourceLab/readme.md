@@ -154,188 +154,188 @@ private int notEmptyWaitThreadCount = 0; // 等待连接的线程数
 
 ```java
 public void shrink(boolean checkTime, boolean keepAlive) {
-    // 获取锁
-    lock.lockInterruptibly();
-    
-    // 是否需要补充
-    boolean needFill = false;
-    // 驱逐的数量
-    int evictCount = 0;
-    // 需要保活的数量
-    int keepAliveCount = 0;
-    int fatalErrorIncrement = fatalErrorCount - fatalErrorCountLastShrink;
-    fatalErrorCountLastShrink = fatalErrorCount;
-    
-    try {
+        // 获取锁
+        lock.lockInterruptibly();
+
+        // 是否需要补充
+        boolean needFill = false;
+        // 驱逐的数量
+        int evictCount = 0;
+        // 需要保活的数量
+        int keepAliveCount = 0;
+        int fatalErrorIncrement = fatalErrorCount - fatalErrorCountLastShrink;
+        fatalErrorCountLastShrink = fatalErrorCount;
+
+        try {
         // 未初始化完成不执行
         if (!inited) {
-            return;
+        return;
         }
 
-        // 池中可用连接数超出最小连接数的数量
-        final int checkCount = poolingCount - minIdle;
-        final long currentTimeMillis = System.currentTimeMillis();
+// 池中可用连接数超出最小连接数的数量
+final int checkCount = poolingCount - minIdle;
+final long currentTimeMillis = System.currentTimeMillis();
         // 循环池中可用连接
         for (int i = 0; i < poolingCount; ++i) {
-            DruidConnectionHolder connection = connections[i];
+        DruidConnectionHolder connection = connections[i];
 
-            // 异常的处理，暂不做考虑
-            if ((onFatalError || fatalErrorIncrement > 0) && (lastFatalErrorTimeMillis > connection.connectTimeMillis))  {
-                keepAliveConnections[keepAliveCount++] = connection;
-                continue;
-            }
-            
-            // 如果检查时间，销毁线程传入的是true
-            if (checkTime) {
-                // 如果设置了物联连接超时时间
-                if (phyTimeoutMillis > 0) {
-                    // 当前连接连接时间过过了超时时间，加入要待回收集合中
-                    long phyConnectTimeMillis = currentTimeMillis - connection.connectTimeMillis;
-                    if (phyConnectTimeMillis > phyTimeoutMillis) {
-                        evictConnections[evictCount++] = connection;
-                        continue;
-                    }
-                }
+        // 异常的处理，暂不做考虑
+        if ((onFatalError || fatalErrorIncrement > 0) && (lastFatalErrorTimeMillis > connection.connectTimeMillis))  {
+        keepAliveConnections[keepAliveCount++] = connection;
+        continue;
+        }
 
-                // 计算当前连接已闲置的时间
-                long idleMillis = currentTimeMillis - connection.lastActiveTimeMillis;
+        // 如果检查时间，销毁线程传入的是true
+        if (checkTime) {
+        // 如果设置了物联连接超时时间
+        if (phyTimeoutMillis > 0) {
+        // 当前连接连接时间过过了超时时间，加入要待回收集合中
+        long phyConnectTimeMillis = currentTimeMillis - connection.connectTimeMillis;
+        if (phyConnectTimeMillis > phyTimeoutMillis) {
+        evictConnections[evictCount++] = connection;
+        continue;
+        }
+        }
 
-                // 如果连接闲置时间比较短，则可不被回收，可以直接跳出循环，因为连接池是尾部更活跃，后面的肯定更短不需要判断了
-                if (idleMillis < minEvictableIdleTimeMillis
+        // 计算当前连接已闲置的时间
+        long idleMillis = currentTimeMillis - connection.lastActiveTimeMillis;
+
+        // 如果连接闲置时间比较短，则可不被回收，可以直接跳出循环，因为连接池是尾部更活跃，后面的肯定更短不需要判断了
+        if (idleMillis < minEvictableIdleTimeMillis
                         && idleMillis < keepAliveBetweenTimeMillis
                 ) {
-                    break;
-                }
+                        break;
+                        }
 
-                // 如果连接闲置时间超出了设置的 最小闲置时间
-                if (idleMillis >= minEvictableIdleTimeMillis) {
-                    // 如果当前连接的位置在checkCount以内，则加入待回收集合
-                    if (checkTime && i < checkCount) {
-                        evictConnections[evictCount++] = connection;
-                        continue;
-                    // 否则如果已超出最大闲置时间，也要加入待回收集合  
-                    } else if (idleMillis > maxEvictableIdleTimeMillis) {
-                        evictConnections[evictCount++] = connection;
-                        continue;
-                    }
-                }
-				// <1> **如果连接闲置时间没有超出最小闲置时间 而且
-                // 如果闲置时间超出保活检测时间，且设置了keepAlive，则加入待验证保活的集合中
-                if (keepAlive && idleMillis >= keepAliveBetweenTimeMillis) {
-                    keepAliveConnections[keepAliveCount++] = connection;
-                }
-            } else {
-                //...
-            }
+                        // 如果连接闲置时间超出了设置的 最小闲置时间
+                        if (idleMillis >= minEvictableIdleTimeMillis) {
+                        // 如果当前连接的位置在checkCount以内，则加入待回收集合
+                        if (checkTime && i < checkCount) {
+        evictConnections[evictCount++] = connection;
+        continue;
+        // 否则如果已超出最大闲置时间，也要加入待回收集合  
+        } else if (idleMillis > maxEvictableIdleTimeMillis) {
+        evictConnections[evictCount++] = connection;
+        continue;
+        }
+        }
+        // <1> **如果连接闲置时间没有超出最小闲置时间 而且
+        // 如果闲置时间超出保活检测时间，且设置了keepAlive，则加入待验证保活的集合中
+        if (keepAlive && idleMillis >= keepAliveBetweenTimeMillis) {
+        keepAliveConnections[keepAliveCount++] = connection;
+        }
+        } else {
+        //...
+        }
         }
 
         // 要删除的连接总数，实际上keepAliveCount只是有可能被删除，还没有最终定论，这里做法是先删除掉，如果验证连接可用后续再加回来即可
         int removeCount = evictCount + keepAliveCount;
         if (removeCount > 0) {
-            // 删除连接池中的废弃连接，由于废弃的连接一定是前removeCount个连接，所以直接使用复制即可删除
-            System.arraycopy(connections, removeCount, connections, 0, poolingCount - removeCount);
-            Arrays.fill(connections, poolingCount - removeCount, poolingCount, null);
-            // 当前可用连接数变小
-            poolingCount -= removeCount;
+        // 删除连接池中的废弃连接，由于废弃的连接一定是前removeCount个连接，所以直接使用复制即可删除
+        System.arraycopy(connections, removeCount, connections, 0, poolingCount - removeCount);
+        Arrays.fill(connections, poolingCount - removeCount, poolingCount, null);
+        // 当前可用连接数变小
+        poolingCount -= removeCount;
         }
         keepAliveCheckCount += keepAliveCount;
 
         // 如果设置了保活，且总连接数小于最小连接数，则需要补充
         if (keepAlive && poolingCount + activeCount < minIdle) {
-            needFill = true;
+        needFill = true;
         }
-    } finally {
+        } finally {
         lock.unlock();
-    }
+        }
 
-    // 如果有要回收的连接
-    if (evictCount > 0) {
+        // 如果有要回收的连接
+        if (evictCount > 0) {
         // 循环
         for (int i = 0; i < evictCount; ++i) {
-            DruidConnectionHolder item = evictConnections[i];
-            Connection connection = item.getConnection();
-            // 关闭连接
-            JdbcUtils.close(connection);
-            destroyCountUpdater.incrementAndGet(this);
+        DruidConnectionHolder item = evictConnections[i];
+        Connection connection = item.getConnection();
+        // 关闭连接
+        JdbcUtils.close(connection);
+        destroyCountUpdater.incrementAndGet(this);
         }
         // 清空需要回收的连接集合
         Arrays.fill(evictConnections, null);
-    }
+        }
 
-    // 如果有要进行保活的连接
-    if (keepAliveCount > 0) {
+        // 如果有要进行保活的连接
+        if (keepAliveCount > 0) {
         // 循环要保活的连接
         for (int i = keepAliveCount - 1; i >= 0; --i) {
-            DruidConnectionHolder holer = keepAliveConnections[i];
-            Connection connection = holer.getConnection();
-            holer.incrementKeepAliveCheckCount();
+        DruidConnectionHolder holer = keepAliveConnections[i];
+        Connection connection = holer.getConnection();
+        holer.incrementKeepAliveCheckCount();
 
-            boolean validate = false;
-            try {
-                // 验证链接是否有效，此时要用到配置的validationQuery来验证连接的有效性，如果没设置，就默认有效
-                this.validateConnection(connection);
-                validate = true;
-            } catch (Throwable error) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("keepAliveErr", error);
-                }
-            }
+        boolean validate = false;
+        try {
+        // 验证链接是否有效，此时要用到配置的validationQuery来验证连接的有效性，如果没设置，就默认有效
+        this.validateConnection(connection);
+        validate = true;
+        } catch (Throwable error) {
+        if (LOG.isDebugEnabled()) {
+        LOG.debug("keepAliveErr", error);
+        }
+        }
 
-            boolean discard = !validate;
-            // 如果连接有效
-            if (validate) {
-                holer.lastKeepTimeMillis = System.currentTimeMillis();
-                // 重新加入连接池最左侧
-                boolean putOk = put(holer, 0L, true);
-                if (!putOk) {
-                    discard = true;
-                }
-            }
+        boolean discard = !validate;
+        // 如果连接有效
+        if (validate) {
+        holer.lastKeepTimeMillis = System.currentTimeMillis();
+        // 重新加入连接池最左侧
+        boolean putOk = put(holer, 0L, true);
+        if (!putOk) {
+        discard = true;
+        }
+        }
 
-            // 如果连接无效
-            if (discard) {
-                try {
-                    // 关闭连接
-                    connection.close();
-                } catch (Exception e) {
-                    // skip
-                }
+        // 如果连接无效
+        if (discard) {
+        try {
+        // 关闭连接
+        connection.close();
+        } catch (Exception e) {
+        // skip
+        }
 
-                lock.lock();
-                try {
-                    // 记录被丢弃的连接数+1
-                    discardCount++;
-                    // 如果且总连接数小于最小连接数，发出空信号
-                    if (activeCount + poolingCount <= minIdle) {
-                        emptySignal();
-                    }
-                } finally {
-                    lock.unlock();
-                }
-            }
+        lock.lock();
+        try {
+        // 记录被丢弃的连接数+1
+        discardCount++;
+        // 如果且总连接数小于最小连接数，发出空信号
+        if (activeCount + poolingCount <= minIdle) {
+        emptySignal();
+        }
+        } finally {
+        lock.unlock();
+        }
+        }
         }
         this.getDataSourceStat().addKeepAliveCheckCount(keepAliveCount);
         // 清空需要保活的连接集合
         Arrays.fill(keepAliveConnections, null);
-    }
+        }
 
-    // 如果需要补充
-    if (needFill) {
+        // 如果需要补充
+        if (needFill) {
         lock.lock();
         try {
-            // 计算需要补充的数量，createTaskCount是使用自定义调度时的逻辑，暂时忽略
-            int fillCount = minIdle - (activeCount + poolingCount + createTaskCount);
-            // 发出空信号
-            for (int i = 0; i < fillCount; ++i) {
-                emptySignal();
-            }
-        } finally {
-            lock.unlock();
+        // 计算需要补充的数量，createTaskCount是使用自定义调度时的逻辑，暂时忽略
+        int fillCount = minIdle - (activeCount + poolingCount + createTaskCount);
+        // 发出空信号
+        for (int i = 0; i < fillCount; ++i) {
+        emptySignal();
         }
-    } else if (onFatalError || fatalErrorIncrement > 0) {
+        } finally {
+        lock.unlock();
+        }
+        } else if (onFatalError || fatalErrorIncrement > 0) {
         // 异常处理 忽略..
-    }
-}
+        }
+        }
 ```
 
 
@@ -356,16 +356,18 @@ url = jdbc:mysql://192.168.100.66:3306/platform?useUnicode=true&characterEncodin
 username = root
 password = 123456
 
-initialSize=1
+initialSize=2
 maxActive = 20
-minActive = 1
+minActive = 2
 minIdle = 5
 maxWait = 30000
 
 removeAbandoned = false
 removeAbandonedTimeout = 6
 validationQuery=select 1
+# 2秒钟就去保活检查
 keepAlive = true
+keepAliveBetweenTimeMillis = 2000
 logAbandoned = true
 
 timeBetweenEvictionRunsMillis = 1000
@@ -385,30 +387,36 @@ wait_timeout=20
 interactive_timeout = 20
 ```
 
+```sql
+show variables like '%wait%'
+
+```
+
+
 ### 测试代码
 
 ```java
     /**
-     * 测试数据库服务端主动掐掉连接，客户端这些连接与服务端通信发数据时报错的场景
-     */
-    public static void testDBServeCutTheConnection() {
+ * 测试数据库服务端主动掐掉连接，客户端这些连接与服务端通信发数据时报错的场景
+ */
+public static void testDBServeCutTheConnection() {
         for (int i = 0; i < 10; i++) {
-            new MyThread().start();
+        new MyThread().start();
         }
 
         try {
-            Thread.sleep(35000);
+        Thread.sleep(35000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+        e.printStackTrace();
         }
 
         System.out.println("---------------------------------------------------------");
 //过35秒后，mysql设置了20秒空闲超时，所以mysql服务端已经掐掉了连接，以下再去使用连接时会报错
         for (int i = 0; i < 10; i++) {
-            new MyThread().start();
+        new MyThread().start();
         }
 
-    }
+        }
 ```
 
 ### 测试结果
@@ -434,24 +442,24 @@ testOnIdle=false 时会有如下报错，因为在getconnection时不会取检�
 
 ```java
 The last packet successfully received from the server was 34,748 milliseconds ago.  The last packet sent successfully to the server was 0 milliseconds ago.
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
-	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
-	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
-	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
-	at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
-	at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1117)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3567)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3456)
-	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3997)
-	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2468)
-	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2629)
-	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2719)
-	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
-	at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2318)
-	at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227)
-	at com.creasypita.MyThread.run(MyThread.java:32)
-Caused by: java.io.EOFException: Can not read response from server. Expected to read 4 bytes, read 0 bytes before connection was unexpectedly lost.
-	at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:3017)
-	at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3467)
-	... 9 more
+        at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+        at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+        at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+        at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+        at com.mysql.jdbc.Util.handleNewInstance(Util.java:411)
+        at com.mysql.jdbc.SQLError.createCommunicationsException(SQLError.java:1117)
+        at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3567)
+        at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3456)
+        at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3997)
+        at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2468)
+        at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2629)
+        at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2719)
+        at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2155)
+        at com.mysql.jdbc.PreparedStatement.executeQuery(PreparedStatement.java:2318)
+        at com.alibaba.druid.pool.DruidPooledPreparedStatement.executeQuery(DruidPooledPreparedStatement.java:227)
+        at com.creasypita.MyThread.run(MyThread.java:32)
+        Caused by: java.io.EOFException: Can not read response from server. Expected to read 4 bytes, read 0 bytes before connection was unexpectedly lost.
+        at com.mysql.jdbc.MysqlIO.readFully(MysqlIO.java:3017)
+        at com.mysql.jdbc.MysqlIO.reuseAndReadPacket(MysqlIO.java:3467)
+        ... 9 more
 ```
