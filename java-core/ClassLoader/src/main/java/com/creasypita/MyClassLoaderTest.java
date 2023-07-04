@@ -17,6 +17,7 @@ public class MyClassLoaderTest {
 //            method.invoke(obj, null);
             Class<?> clazz = a.loadClass("com.creasypita.Person");
             Object obj = clazz.newInstance();
+            System.out.println("obj classloader:" + obj.getClass().getClassLoader());
             Method method = clazz.getDeclaredMethod("doSomething", null);
             method.invoke(obj, null);
 

@@ -3,6 +3,7 @@ package com.creasypita;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.sql.Driver;
 import java.util.Properties;
 
 /**
@@ -16,6 +17,30 @@ public class MyDBClassLoaderTest {
     static final String MYSQL8X_JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     public static void main(String[] args) throws MalformedURLException, NoSuchMethodException {
+        MyWebAppLoader a = new MyWebAppLoader("E:\\work\\myproject\\java\\Java-Labs\\java-core\\ClassLoader\\src\\main\\resources\\a\\");
+        try {
+            //注册jdbc驱动
+            Class<?> driverClazz = a.loadClass(MYSQL5X_JDBC_DRIVER);
+            Driver driver = (Driver) driverClazz.newInstance();
+//            Object obj =  driverClazz.newInstance();
+            System.out.println(driver.getClass().getClassLoader());
+//            System.out.println(obj.getClass().getClassLoader());
+            Method connectMethod = driverClazz.getMethod("connect", String.class, Properties.class);
+            Properties properties = new Properties();
+            properties.put("user", USER);
+            properties.put("password", PASS);
+            //获取连接
+            Object connObj = connectMethod.invoke(driver, DB_URL, properties);
+//            //输出连接类的classloader
+            System.out.println(connObj.getClass().getClassLoader());
+
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main1(String[] args) throws MalformedURLException, NoSuchMethodException {
         MyWebAppLoader a = new MyWebAppLoader("E:\\work\\myproject\\java\\Java-Labs\\java-core\\ClassLoader\\src\\main\\resources\\a\\");
         try {
             //注册jdbc驱动
