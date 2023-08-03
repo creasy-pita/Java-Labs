@@ -25,6 +25,7 @@
         <module>cryptology</module>
         <module>cryptology/AES</module>
         <module>Exception</module>
+        <module>ClassLoaderDemo1</module>
         <!--        <module>jvmTest</module>-->
 <!--        <module>jdbc</module>-->
         <!--        <module>Spring-DataSource</module>-->
