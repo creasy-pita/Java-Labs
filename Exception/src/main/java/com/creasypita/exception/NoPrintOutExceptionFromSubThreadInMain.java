@@ -8,7 +8,7 @@ package com.creasypita.exception;
 public class NoPrintOutExceptionFromSubThreadInMain {
     public static void main(String[] args) {
         try {
-            new MyThreadWithException().run();
+            new MyThreadWithException().start();
         } catch (Exception e) {
             throw e;
         }
