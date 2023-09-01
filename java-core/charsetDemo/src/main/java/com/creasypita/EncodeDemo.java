@@ -32,8 +32,8 @@ class EncodeDemo2 {
      * <br>补救还原乱码
      * <br>演示思路
      * <br>gbk的字符串s，在gbk编码后
-     * <br>使用ISO8859-1解码得到乱码的字符串s1，但是s1实例内部的字节数据并没有改变，
-     * <br>还是原始的字节(使用 bytes[] b1  = s1.getBytes("ISO8859-1")可以获取原始的字节)
+     * <br>使用ISO8859-1解码得到乱码的字符串s1
+     * <br>但是s1实例内部的字节数据并没有改变，还是原始的字节(使用 bytes[] b1  = s1.getBytes("ISO8859-1")可以获取原始的字节)
      * <br>通过 String s2 = new String(b1, "gbk") 获取到原始正确的字符。
      *
      * <font color="red">注意 如果是用utf-8去解码就没办法还原</font>
