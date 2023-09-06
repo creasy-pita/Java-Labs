@@ -19,6 +19,7 @@
         <module>ClassLoaderDemo2</module>
         <module>charsetDemo</module>
         <module>ioDemo</module>
+        <module>SocketDemo</module>
     </modules>
 
     <properties>
