@@ -14,6 +14,7 @@
 <modules>
     <module>threadlocal</module>
     <module>thread-lock</module>
+    <module>threadDemo</module>
 </modules>
 
     <properties>
