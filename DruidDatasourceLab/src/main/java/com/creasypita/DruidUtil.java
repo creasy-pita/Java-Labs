@@ -64,8 +64,8 @@ public class DruidUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("当前连接池活跃连接数为" +  ((DruidDataSource) dataSource).getActiveCount());
-        System.out.println("当前连接池空闲连接数为" +   ((DruidDataSource) dataSource).getPoolingCount());
+        System.out.println(Thread.currentThread() + "当前连接池活跃连接数为" +  ((DruidDataSource) dataSource).getActiveCount());
+        System.out.println(Thread.currentThread() + "当前连接池空闲连接数为" +   ((DruidDataSource) dataSource).getPoolingCount());
     }
 
 }
