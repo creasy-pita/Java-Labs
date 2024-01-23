@@ -2,18 +2,15 @@ package com.creasypita;
 
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.spi.LoggerFactory;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 
 /**
  * Created by lujq on 5/20/2023.
  */
-public class DruidDataSourceTest {
+public class DBServeCutTheConnectionTest {
 
-    private static final Logger logger = Logger.getLogger(DruidDataSourceTest.class);
+    private static final Logger logger = Logger.getLogger(DBServeCutTheConnectionTest.class);
 
     public static void main(String[] args) throws SQLException {
         logger.debug("开始---------------------------------------------------------");
