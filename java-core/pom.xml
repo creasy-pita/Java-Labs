@@ -20,6 +20,7 @@
         <module>charsetDemo</module>
         <module>ioDemo</module>
         <module>SocketDemo</module>
+        <module>JsonDemo</module>
     </modules>
 
     <properties>

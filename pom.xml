@@ -30,6 +30,7 @@
         <module>springRedisDemo</module>
         <module>redisDemo/spring-redis</module>
         <module>logger/log4j2Demo</module>
+        <module>cpuDemo</module>
         <!--        <module>jvmTest</module>-->
 <!--        <module>jdbc</module>-->
         <!--        <module>Spring-DataSource</module>-->
