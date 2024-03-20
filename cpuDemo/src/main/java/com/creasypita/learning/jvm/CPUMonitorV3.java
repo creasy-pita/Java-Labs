@@ -57,26 +57,26 @@ public class CPUMonitorV3 {
             System.out.println("1");
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             System.out.println("2");
-            String line;
+            String line, hitLine = null;
             boolean found = false;
 
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
-                if (line.contains("java")) {
+                if (!found && line.contains("java")) {
+                    hitLine = line;
                     System.out.println("Found Java Process:");
                     System.out.println(line);
                     found = true;
-                    break;
                 }
             }
             // 等待进程执行完成，并获取返回值
-//            int exitCode = process.waitFor();
-//            System.out.println("Exit code: " + exitCode);
-            process.destroy();
+            int exitCode = process.waitFor();
+            System.out.println("Exit code: " + exitCode);
+//            process.destroy();
             reader.close();
 
             if (found) {
-                String[] parts = line.trim().split("\\s+");
+                String[] parts = hitLine.trim().split("\\s+");
                 String pid = parts[0];
                 String jstackCommand = "jstack " + pid;
                 System.out.println("Begin Dumping threads of the process  with PID: " + pid);
