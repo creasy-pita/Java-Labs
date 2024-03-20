@@ -27,73 +27,41 @@ public class CPUMonitorV3 {
                 if (cpuUsage > THRESHOLD) {
                     System.out.println("CPU Usage exceeds " + THRESHOLD + "%, finding process and thread...");
                     findAndDumpHighCPUThread();
+                    System.out.println("run() 1");
                 }
             } catch (IOException | InterruptedException e) {
+                System.out.println(e.getMessage());
                 e.printStackTrace();
             }
         }
 
-//        private double getCPUUsage() throws IOException, InterruptedException {
-//            String command = "top -bn1 | grep 'Cpu(s)' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'";
-//            Process process = Runtime.getRuntime().exec(command);
-//            process.waitFor();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//            String line = reader.readLine();
-//            reader.close();
-//            return Double.parseDouble(line);
-//        }
-
         private double getCPUUsage() throws IOException, InterruptedException {
-            // 刷新两次top命令，取第二次刷新的数据
-            String command = "top -bn2 | grep 'Cpu(s)' | sed -n '2p' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'";
-            Process process = Runtime.getRuntime().exec(command);
-            process.waitFor();
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//            String line = reader.readLine();
-//            System.out.println("getCPUUsage:" + line);
-//            reader.close();
-//            return Double.parseDouble(line);
-
-
-
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                 BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))) {
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    System.out.println(command + ",命令执行结果：" + line);
-                }
-
-                while ((line = errorReader.readLine()) != null) {
-                    // 输出标准错误（stderr），标记为错误信息
-                    if (line.startsWith("[ERROR]")) {
-                        System.out.println(command + "，命令执行错误："+line);
-                    } else {
-                        System.out.println(command + "，[WARNING]" + line);
-                    }
-                }
-
-                // 等待命令执行完成
-                int exitCode = process.waitFor();
-                if (exitCode != 0) {
-                    throw new RuntimeException("执行命令失败！");
-                }
-            } catch (IOException | InterruptedException e) {
-                Thread.currentThread().interrupt(); // 如果是InterruptedException，则重新设置中断状态
-                throw new RuntimeException(e);
-            }
-            return 0;
-        }
-
-
-        private void findAndDumpHighCPUThread() throws IOException, InterruptedException {
-            String command = "top -H -b -n 1 -o %CPU";
-            Process process = Runtime.getRuntime().exec(command);
+            // 方式1 Process process = Runtime.getRuntime().exec(jstackCommand);
+            // 方式2 Process process = processBuilder.start()
+            // 方式1 不支持 shell 的管道符和重定向机制 方式2可以
+            ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "top -bn2 | grep 'Cpu(s)' | sed -n '2p' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'");
+            Process process = processBuilder.start();
             process.waitFor();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line = reader.readLine();
+            System.out.println("cpuusge:" + line);
+            reader.close();
+            return Double.parseDouble(line);
+        }
+
+        private void findAndDumpHighCPUThread() throws IOException, InterruptedException {
+            // top 按-o 选项中的cpu从高到低排序
+            ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "top -H -b -n 1 -o %CPU");
+            Process process = processBuilder.start();
+
+            System.out.println("1");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            System.out.println("2");
             String line;
             boolean found = false;
+
             while ((line = reader.readLine()) != null) {
+                System.out.println(line);
                 if (line.contains("java")) {
                     System.out.println("Found Java Process:");
                     System.out.println(line);
@@ -101,6 +69,10 @@ public class CPUMonitorV3 {
                     break;
                 }
             }
+            // 等待进程执行完成，并获取返回值
+//            int exitCode = process.waitFor();
+//            System.out.println("Exit code: " + exitCode);
+            process.destroy();
             reader.close();
 
             if (found) {
