@@ -35,17 +35,23 @@ public class CPUMonitorV3 {
             }
         }
 
-        private double getCPUUsage() throws IOException, InterruptedException {
+        private double getCPUUsage()  {
             // 方式1 Process process = Runtime.getRuntime().exec(jstackCommand);
             // 方式2 Process process = processBuilder.start()
             // 方式1 不支持 shell 的管道符和重定向机制 方式2可以
             ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "top -bn2 | grep 'Cpu(s)' | sed -n '2p' | sed 's/.*, *\\([0-9.]*\\)%* id.*/\\1/' | awk '{print 100 - $1}'");
-            Process process = processBuilder.start();
-            process.waitFor();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = reader.readLine();
-            System.out.println("cpuusge:" + line);
-            reader.close();
+            String line;
+            try {
+                Process process = processBuilder.start();
+                process.waitFor();
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                    line = reader.readLine();
+                } catch ( IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             return Double.parseDouble(line);
         }
 
@@ -53,27 +59,27 @@ public class CPUMonitorV3 {
             // top 按-o 选项中的cpu从高到低排序
             ProcessBuilder processBuilder = new ProcessBuilder("/bin/bash", "-c", "top -H -b -n 1 -o %CPU");
             Process process = processBuilder.start();
+            String hitLine;
+            boolean found;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                hitLine = null;
+                found = false;
 
-            System.out.println("1");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            System.out.println("2");
-            String line, hitLine = null;
-            boolean found = false;
-
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
-                if (!found && line.contains("java")) {
-                    hitLine = line;
-                    System.out.println("Found Java Process:");
-                    System.out.println(line);
-                    found = true;
+                while ((line = reader.readLine()) != null) {
+                    if (!found && line.contains("java")) {
+                        hitLine = line;
+                        System.out.println("Found Java Process:");
+                        System.out.println(line);
+                        found = true;
+                    }
                 }
+                // 等待进程执行完成，并获取返回值
+                int exitCode = process.waitFor();
+                System.out.println("Exit code: " + exitCode);
+            } catch (IOException e){
+                throw new RuntimeException(e);
             }
-            // 等待进程执行完成，并获取返回值
-            int exitCode = process.waitFor();
-            System.out.println("Exit code: " + exitCode);
-//            process.destroy();
-            reader.close();
 
             if (found) {
                 String[] parts = hitLine.trim().split("\\s+");
@@ -81,13 +87,15 @@ public class CPUMonitorV3 {
                 String jstackCommand = "jstack " + pid;
                 System.out.println("Begin Dumping threads of the process  with PID: " + pid);
                 Process jstackProcess = Runtime.getRuntime().exec(jstackCommand);
-                jstackProcess.waitFor();
-                BufferedReader jstackReader = new BufferedReader(new InputStreamReader(jstackProcess.getInputStream()));
-                String jstackLine;
-                while ((jstackLine = jstackReader.readLine()) != null) {
-                    System.out.println(jstackLine);
+                try (BufferedReader jstackReader = new BufferedReader(new InputStreamReader(jstackProcess.getInputStream()))) {
+                    String jstackLine;
+                    while ((jstackLine = jstackReader.readLine()) != null) {
+                        System.out.println(jstackLine);
+                    }
                 }
-                jstackReader.close();
+                // 等待进程执行完成，并获取返回值
+                int exitCode = jstackProcess.waitFor();
+                System.out.println("Exit code: " + exitCode);
                 System.out.println("End Dumping threads of the process end with PID: " + pid);
                 Thread.sleep(10000);
             }
