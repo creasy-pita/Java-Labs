@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.creasypita.mapper.SequenceMapper">
+    <update id="updateAndGetNextVal">
+        UPDATE t_sequence
+        SET current_val = LAST_INSERT_ID(current_val + 1)
+        WHERE seq_name = #{seqName}
+    </update>
+    <select id="selectCurrentVal" resultType="long">
+        SELECT LAST_INSERT_ID()
+    </select>
+</mapper>

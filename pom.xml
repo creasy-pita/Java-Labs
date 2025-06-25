@@ -32,6 +32,8 @@
         <module>logger/log4j2Demo</module>
         <module>cpuDemo</module>
         <module>fastjsonDemo</module>
+        <module>multiple-thread/threadStack</module>
+        <module>project</module>
         <!--        <module>jvmTest</module>-->
 <!--        <module>jdbc</module>-->
         <!--        <module>Spring-DataSource</module>-->
