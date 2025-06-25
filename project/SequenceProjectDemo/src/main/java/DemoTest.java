@@ -12,7 +12,7 @@ public class DemoTest {
         String password = "platform";
         String resource = "mybatis-config.xml";
         MyDbUtil dbUtilReg3 = new MyDbUtil(resource, url, username, password);
-        int i =100;
+        int i =10;
         for (int i1 = 0; i1 < i; i1++) {
             System.out.println(SequenceService.nextVal("lujq", dbUtilReg3));
         }

@@ -7,6 +7,9 @@
         SET current_val = LAST_INSERT_ID(current_val + 1)
         WHERE seq_name = #{seqName}
     </update>
+    <insert id="insertSequence">
+        INSERT INTO t_sequence(seq_name, current_val) VALUES(#{seqName}, #{initVal})
+    </insert>
     <select id="selectCurrentVal" resultType="long">
         SELECT LAST_INSERT_ID()
     </select>
