@@ -8,6 +8,7 @@ import java.io.*;
 public class App {
 
     public static void main(String[] args) throws IOException {
+
         String filename = "E:\\work\\myproject\\java\\Java-Labs\\Serialization\\src\\main\\resources\\output\\a.txt";
 //        Obj1 obj1 = new Obj1();
 //        obj1.setF1("abcdef");

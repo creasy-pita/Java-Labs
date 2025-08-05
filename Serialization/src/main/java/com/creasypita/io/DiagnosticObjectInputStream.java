@@ -39,38 +39,75 @@ public class DiagnosticObjectInputStream extends ObjectInputStream {
     }
 
     @Override
-    protected Object readObjectOverride() throws IOException, ClassNotFoundException {
+    public Object readObjectOverride() throws IOException, ClassNotFoundException {
         // 记录开始时间
         long startTime = System.currentTimeMillis();
-
         // 增加对象计数
         objectCount++;
 
-        // 读取对象前标记
+        // 获取下一个可用handle（模拟JDK内部机制）
         int handle = nextHandle();
-        String className = readClassDescriptor().getName();
 
-        // 更新当前路径
-        String pathEntry = className + "@" + handle;
-        currentPath.push(pathEntry);
         currentDepth++;
 
         try {
             // 打印深度信息
             if (currentDepth > maxDiagnosticDepth) {
-                throw new DepthLimitExceededException("深度超过诊断阈值: " + maxDiagnosticDepth);
+                throw new DepthLimitExceededException("深度超过阈值: " + maxDiagnosticDepth +
+                        "\n当前路径: " + getCurrentPath());
             }
 
             if (currentDepth % 100 == 0 || objectCount % 1000 == 0) {
-                printDiagnosticInfo("处理中...", startTime);
+                printDiagnosticInfo("处理中", startTime);
             }
-
             // 实际读取对象
-            Object obj = super.readObjectOverride();
+            Object obj = super.readObject();
+            currentPath.push(obj.getClass().getName() + "@" + handle);
 
             // 记录对象引用
-            objectHandles.put(System.identityHashCode(obj), getCurrentPath());
+            objectHandles.put(handle, getCurrentPath());
+            return obj;
+        } finally {
+            // 清理路径
+            currentPath.pop();
+            currentDepth--;
 
+            // 打印完成信息
+            long duration = System.currentTimeMillis() - startTime;
+            if (duration > 50 || currentDepth == 0) {
+                printDiagnosticInfo("完成读取", startTime);
+            }
+        }
+    }
+
+    public Object readObjectOverride2() throws IOException, ClassNotFoundException {
+        // 记录开始时间
+        long startTime = System.currentTimeMillis();
+        // 增加对象计数
+        objectCount++;
+
+        // 获取下一个可用handle（模拟JDK内部机制）
+        int handle = nextHandle();
+        ObjectStreamClass desc = readClassDescriptor();
+        String className = desc.getName();
+
+        currentPath.push(className + "@" + handle);
+        currentDepth++;
+
+        try {
+            // 打印深度信息
+            if (currentDepth > maxDiagnosticDepth) {
+                throw new DepthLimitExceededException("深度超过阈值: " + maxDiagnosticDepth +
+                        "\n当前路径: " + getCurrentPath());
+            }
+
+            if (currentDepth % 100 == 0 || objectCount % 1000 == 0) {
+                printDiagnosticInfo("处理中", startTime);
+            }
+            // 实际读取对象
+            Object obj = super.readObject();
+            // 记录对象引用
+            objectHandles.put(handle, getCurrentPath());
             return obj;
         } finally {
             // 清理路径
