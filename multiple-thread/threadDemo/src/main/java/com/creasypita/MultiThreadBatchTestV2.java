@@ -113,7 +113,7 @@ public class MultiThreadBatchTestV2 implements Runnable {
         //获取线程名
         threadNo = Integer.parseInt(java.lang.Thread.currentThread().getName());
         totalCount[threadNo] = 0;
-        // 等待主线程唤醒
+        // 等待主线程唤醒  this 也就是 MultiThreadBatchTestV2 test
         synchronized (this) {
             try {
                 this.wait();
